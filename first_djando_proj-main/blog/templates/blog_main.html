@@ -1,0 +1,56 @@
+{% extends 'navbar.html' %}
+
+    {% block content %}
+    <div class = "container">
+        <h1>блог запрацював</h1>
+        {% if posts %}
+            <div class = "row">
+                    {% for post in posts %}
+                    <div class = "col s12 l l6">
+                        <div class="card hoverable">
+                            <div class="card-content">
+                                <div class="card-image">
+                                    <img class = "center-align responsive-img"
+                                    src="/{{ post.img }}">
+                                </div>
+                                <span class="card-title">
+                                    <a href="/{{ post.post_slug }}">{{ post.title }}</a>
+                                    </span> 
+                                </span>
+                                <h6>Переглянуло: {{ post.get_views_number }}</h6>
+                                <h6>{{ post.created_at }}</h6>
+                                <div class="card-content">{{ post.text|truncatechars:100 }}...</div>
+                                <br><br><br>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        
+            <div class="row">
+                <ul class="pagination">
+                    {% if posts.has_previous %}
+                        <li class="waves-effect"><a href="?page={{ posts.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                    {% else %}
+                        <li class="disabled"><a href=""><i class="material-icons">chevron_left</i></a></li>
+                    {% endif %}
+
+                    {% for num in posts.paginator.page_range %}
+                        {% if posts.number == num %}
+                            <li class="active"><a href="">{{num}}</a></li>
+                        {% else %}
+                            <li class="waves-effect"><a href="?page={{ num }}">{{num}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if posts.has_next %}
+                        <li class="waves-effect"><a href="?page={{ posts.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                    {% else %}
+                        <li class="disabled"><a href=""><i class="material-icons">chevron_right</i></a></li>
+                    {% endif %}
+                </ul>                
+            </div>
+
+        {% endif %}
+    </div>
+    {% endblock %}

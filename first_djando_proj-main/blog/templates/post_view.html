@@ -1,0 +1,28 @@
+{% extends 'navbar.html' %}
+
+    {% block content %}
+    <div class = "container">
+        {% if post %}
+            <div class = "row">
+                    <div class = "col s12 l l12">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">
+                                    <a href="/">{{ post.title }}</a>
+                                </span>
+                                <span text-align="center"
+                                display="block">
+                                    <img class = "center-align responsive-img"
+                                    src="/{{ post.img }}">
+                                </span>
+                                <h6>Переглянуто: {{ views_num }}</h6>
+                                <h6>{{ post.created_at }}</h6>
+                                <div class="card-content">{{ post.text }}</div>
+                                <br><br><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+    {% endblock %}

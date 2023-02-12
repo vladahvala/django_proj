@@ -1,0 +1,37 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h4>Профіль користувача {{user.username}}</h4>
+        </div>
+            <div class="col s12 m8 offset-m2 l6 offset-l3">
+                <div class="card-panel grey lighten-5 z-depth-1">
+                  <div class="row valign-wrapper">
+                    <div class="col s2">
+                        <img class="circle responsive-img" src='/{{profile.avatar}}'>
+                        <p>{{user.username}}</p>
+                    </div>
+                    <div class="col s10">
+                      <span class="black-text">
+                        {{profile.about}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <br><br><br>
+
+            <div class="row">
+                <form action = "{% url 'user_profile' %}" 
+                method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{profile_form.as_div }}
+                    <br><br><br>
+                         <button class="btn waves-effect"
+                         type= "submit">
+                            Change profile data
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

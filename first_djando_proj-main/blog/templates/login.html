@@ -1,0 +1,12 @@
+{% extends 'navbar.html' %}
+{% block content %}
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %} 
+            {{ form }}
+            <br>
+            <button class="waves-effect waves-light btn"
+             type="submit">Увійти</button>
+        </form>
+    </div>
+{% endblock %}
