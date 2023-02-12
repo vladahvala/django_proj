@@ -37,11 +37,14 @@ class Post(models.Model):
                             max_length=200,
                             verbose_name="Картинка для поста") #поле для зображення
     views_number = models.ManyToManyField(User, related_name="views_rating", blank=True)
+    likes = models.ManyToManyField(User, related_name="post_likes", blank=True)
     def get_views_number(self):
         return self.views_number.count()
         #upload_to='' - папка для завантаження
         #static -  статичні файли 
         #max_length=200 - максимальна довжина посилання на зображення
+    def get_likes_number(self):
+        return self.likes.count()
     def save(self, *arg, **kwargs): #ф-ція для збереження картинок на сайт, < зображення
         super().save() #збереження для класу models
         img = Image.open(self.img.path) #шлях зображення
@@ -50,3 +53,6 @@ class Post(models.Model):
             img.save(self.img.path)
     def __str__(self): #при викликанні print буде повертатися саме заголовок(title)
         return self.title
+
+       
+

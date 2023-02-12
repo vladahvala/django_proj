@@ -52,7 +52,16 @@ def look_profile(request, username):
         return redirect(to='user_profile')
     else:
         return render(request, "look_profile.html", {'profile': look_for})
-
+    
+def like_post(request, post_id):
+    """"Add 1 like for 1 post per User"""
+    post = Post.objects.get(id=post_id)
+    if post.likes.filter(id=request.user.id).exists():
+        pass
+    else:
+        post.likes.add(request.user)
+    return redirect(f'/{post.post_slug}')
+        
 def search_post(request):
     """Functionality for navbar to process search form"""
     posts = None
@@ -71,8 +80,13 @@ def slug_process(request, slug):
                 #filter - повертає об'єкти, які відповідають певному параметру
                 post.views_number.add(request.user)
         views = post.get_views_number()
+        likes = post.get_likes_number()
+        is_liked = post.likes.filter(id=request.user.id).exists()
         data_dict = { 'post': post, 
-                      'views_num': views  }
+                      'views_num': views,
+                      'likes_num': likes,
+                      'is_liked': is_liked
+                    }
         return render(request, 'post_view.html', data_dict)
 
 def register(request):
