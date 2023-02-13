@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Post, Profile
+from .models import Post, Profile, Comment
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .forms import ProfileForm
+from .forms import ProfileForm, AddCommentForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 
@@ -71,6 +71,19 @@ def search_post(request):
     data_dict = { "posts": posts }
     return render(request, 'blog_main.html', data_dict)
 
+def get_comment_form(request, post):
+    """Post user commentary Form processing"""
+    if request.method =="POST":
+        form = AddCommentForm(request.POST)
+        if form.is_valid():
+            content = request.POST.get('content')
+            comment = Comment.objects.create(post=post, author=request.user, content=content)
+            comment.save()#зберігаємо об'єкт в базі данних
+        return redirect(f'/{post.post_slug}')
+    else:
+        form = AddCommentForm()
+    return form
+
 def slug_process(request, slug):
     post_slugs = [p.post_slug for p in Post.objects.all() ]
     if slug in post_slugs:
@@ -82,8 +95,12 @@ def slug_process(request, slug):
         views = post.get_views_number()
         likes = post.get_likes_number()
         is_liked = post.likes.filter(id=request.user.id).exists()
+        comments = Comment.objects.filter(post=post) #змінна=елементові класу post
+        form = get_comment_form(request, post)
         data_dict = { 'post': post, 
                       'views_num': views,
+                      'comment_form': form,
+                      'comments': comments,
                       'likes_num': likes,
                       'is_liked': is_liked
                     }

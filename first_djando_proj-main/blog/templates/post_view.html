@@ -41,6 +41,22 @@
                         </div>
                     </div>
                 </div>
+                {% if user.is_authenticated%}
+                    <div class="row">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ comment_form.as_p }}
+                            <button class="btn" type="summit">Publish</button>
+                        </form>
+                    </div>
+                {% endif %}
+                {% for comment in comments %}
+                    <div class="row">
+                        <img src="/{{comment.author.profile.avatar}}"
+                        <p>{{ comment }}</p>
+                        <p>{{ comment.created_at }}</p>
+                    </div>
+                {% endfor %}
         {% endif %}
     </div>
     {% endblock %}

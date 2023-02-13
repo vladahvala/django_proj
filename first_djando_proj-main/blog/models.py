@@ -54,5 +54,12 @@ class Post(models.Model):
     def __str__(self): #при викликанні print буде повертатися саме заголовок(title)
         return self.title
 
-       
-
+    
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments",)
+    #.CASCADE - каскадне видалення коментарів при видаленні поста
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateField(default=timezone.now)
+    def __str__(self): 
+        return self.content
