@@ -20,15 +20,17 @@
                                         <h6>Переглянуто: {{ views_num }}</h6>
                                     </div>
                                     <div class = "col s6 l6">
-                                        <form methof="GET" action="{% url 'like_post' post.id %}">
-                                                <button type="summit" class="btn">
-                                                    {% if is_liked %}
-                                                        <i class="medium material-icons">favorite</i>
-                                                    {% else %}
-                                                    <i class="medium material-icons">favorite_border</i>
-                                                    {% endif %}
-                                                </button>            
-                                        </form>
+                                        {% if user.is_authenticated %}
+                                            <form methof="GET" action="{% url 'like_post' post.id %}">           
+                                            </form>
+                                        {% endif %}
+                                        <button type="summit" class="btn">
+                                        {% if is_liked %}
+                                            <i class="medium material-icons">favorite</i>
+                                        {% else %}
+                                            <i class="medium material-icons">favorite_border</i>
+                                        {% endif %}
+                                        </button> 
                                         <strong>{{ likes_num }} Like {{ likes_num|pluralize }} </strong>
                                     </div>
                                 </div>
