@@ -1,0 +1,21 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+</script>
+
+
+<div class="col s12 l2 m2">
+    <ul class="collapsible">
+        {% for cat in sidebar %}
+            <li>
+                <div class="collapsible-header">{{cat.name}}</div>
+                <div class="collapsible-body">
+                    <a href="/{{cat.category_slug}}">{{cat.info}}</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+</div>

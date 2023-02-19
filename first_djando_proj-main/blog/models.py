@@ -25,7 +25,27 @@ class Profile(models.Model):
             img.save(self.avatar.path)
     def __str__(self):
         return self.user.username
-        
+
+class Category(models.Model):
+    name = models.CharField(max_length=80)
+    info = models.TextField(blank=True)
+    category_slug = models.CharField(max_length=80, default="category_main")
+    img = models.ImageField(upload_to='blog/static/img/categories',
+                            height_field=None,
+                            width_field=None,
+                            verbose_name="Зображення категорії", 
+                            default='default.jpg')
+    class Meta:
+        verbose_name_plural = "Категорії"
+    def save(self,*agr, **kwargs):
+        super().save()
+        img = Image.open(self.img.path)
+        if img.height>200 or img.width>200:
+            img.thumbnail((200, 200))
+            img.save(self.img.path)
+    def __str__(self):
+        return f"{self.name}   URL: {self.category_slug}"
+
 class Post(models.Model): 
     title = models.CharField(max_length=100) #CharField - тип для короткого тексту
     text = models.TextField() #для зберігання тексту
@@ -38,6 +58,9 @@ class Post(models.Model):
                             verbose_name="Картинка для поста") #поле для зображення
     views_number = models.ManyToManyField(User, related_name="views_rating", blank=True)
     likes = models.ManyToManyField(User, related_name="post_likes", blank=True)
+    category = models.ForeignKey(Category, default=1, 
+                                 on_delete=models.SET_DEFAULT,
+                                 verbose_name="Категорія")
     def get_views_number(self):
         return self.views_number.count()
         #upload_to='' - папка для завантаження

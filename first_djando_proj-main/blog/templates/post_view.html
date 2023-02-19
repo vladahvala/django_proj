@@ -40,23 +40,27 @@
                             </div>
                         </div>
                     </div>
+                
+                    {% include "sidebar.html" %}
                 </div>
-                {% if user.is_authenticated%}
+                <div class="row">
+                {% if user.is_authenticated %}
                     <div class="row">
                         <form method="POST">
-                            {% csrf_token %}
+                            {% csrf_token %} 
                             {{ comment_form.as_p }}
-                            <button class="btn" type="summit">Publish</button>
+                            <button class="btn" type="submit">Опублікувати</button>
                         </form>
                     </div>
                 {% endif %}
                 {% for comment in comments %}
                     <div class="row">
-                        <img src="/{{comment.author.profile.avatar}}"
+                        <img src="/{{comment.author.profile.avatar}}">
                         <p>{{ comment }}</p>
                         <p>{{ comment.created_at }}</p>
                     </div>
                 {% endfor %}
-        {% endif %}
-    </div>
-    {% endblock %}
+                </div>
+            {% endif %}
+        </div>
+        {% endblock %}

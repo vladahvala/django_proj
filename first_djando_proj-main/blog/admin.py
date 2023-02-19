@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import Post #імпортуємо клас з models.py
+from .models import Post, Comment, Category
+# Register your models here.
 
-admin.site.register(Post) #регеструємо нову таблицю
+class PostAdmin(admin.ModelAdmin):
+    fields = ('title', 'text', 'created_at', 'img', 'category')
 
-#ndjd
+admin.site.register(Post, PostAdmin)
+admin.site.register(Comment)
+admin.site.register(Category)
