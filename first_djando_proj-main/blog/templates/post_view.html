@@ -1,10 +1,9 @@
 {% extends 'navbar.html' %}
 
     {% block content %}
-    <div class = "container">
         {% if post %}
             <div class = "row">
-                    <div class = "col s12 l l12">
+                    <div class = "col s10 l10">
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title">
@@ -45,6 +44,7 @@
                 </div>
                 <div class="row">
                 {% if user.is_authenticated %}
+                <div class = "container">
                     <div class="row">
                         <form method="POST">
                             {% csrf_token %} 
@@ -53,14 +53,22 @@
                         </form>
                     </div>
                 {% endif %}
+                <br><br>
                 {% for comment in comments %}
+                <div class="card-panel #bbdefb blue lighten-4">
                     <div class="row">
-                        <img src="/{{comment.author.profile.avatar}}">
-                        <p>{{ comment }}</p>
-                        <p>{{ comment.created_at }}</p>
+                        <div class="col s4 l12">
+                            <img src="/{{comment.author.profile.avatar}}" class="circle responsive-img">
+                        </div>
+                        <div class="col s8 l10">
+                            <p>{{ comment }}</p>
+                            <p>{{ comment.created_at }}</p>
+                        </div>
                     </div>
+                </div>
                 {% endfor %}
                 </div>
-            {% endif %}
-        </div>
-        {% endblock %}
+            </div>
+        {% endif %}
+        
+    {% endblock %}

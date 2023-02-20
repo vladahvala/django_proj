@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 def blog_main(request, *args):
     page = request.GET.get('page')
     posts = Post.objects.all()
+    sidebar = Category.objects.all()
     paginator = Paginator(posts, 3) #кількість постів, що відображаються на сторінці
     try:
         data_page = paginator.page(page)
@@ -21,7 +22,8 @@ def blog_main(request, *args):
     except EmptyPage:
         data_page = paginator.page(paginator.num_pages)
     data_dict = {
-        "posts": data_page
+        "posts": data_page,
+        "sidebar": sidebar,
     }
     return render(request, 'blog_main.html', data_dict)#запит, адреса, словник із даними
 
@@ -91,7 +93,7 @@ def slug_process(request, slug):
     sidebar = Category.objects.all()
     categories = [ c.category_slug for c in sidebar]
     if slug in categories:
-        category_posts = Post.objects.filter(post_category__category_slug=slug)
+        category_posts = Post.objects.filter(category__category_slug=slug)
         return render(request, "category.html", {
             "posts" : category_posts, 
             "sidebar": sidebar
