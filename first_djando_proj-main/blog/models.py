@@ -58,6 +58,7 @@ class Post(models.Model):
                             verbose_name="Картинка для поста") #поле для зображення
     views_number = models.ManyToManyField(User, related_name="views_rating", blank=True)
     likes = models.ManyToManyField(User, related_name="post_likes", blank=True)
+    saving =  models.ManyToManyField(User, related_name="post_savings", blank=True)
     category = models.ForeignKey(Category, default=1, 
                                  on_delete=models.SET_DEFAULT,
                                  verbose_name="Категорія")

@@ -59,11 +59,26 @@ def like_post(request, post_id):
     """"Add 1 like for 1 post per User"""
     post = Post.objects.get(id=post_id)
     if post.likes.filter(id=request.user.id).exists():
-        pass
+        post.likes.remove(request.user)
     else:
         post.likes.add(request.user)
     return redirect(f'/{post.post_slug}')
-        
+
+def save_post(request, post_id):
+    """"Save post"""
+    post = Post.objects.get(id=post_id)
+    if post.saving.filter(id=request.user.id).exists():
+        post.saving.remove(request.user)
+    else:
+        post.saving.add(request.user)
+    return redirect(f'/{post.post_slug}')
+
+def show_saved(request):
+    """"Functionality for profile to process saved form"""
+    posts = Post.objects.filter(saving=request.user) 
+    data_dict = { "posts": posts }
+    return render(request, 'blog_main.html', data_dict)
+
 def search_post(request):
     """Functionality for navbar to process search form"""
     posts = None
@@ -109,6 +124,7 @@ def slug_process(request, slug):
         views = post.get_views_number()
         likes = post.get_likes_number()
         is_liked = post.likes.filter(id=request.user.id).exists()
+        is_saved = post.saving.filter(id=request.user.id).exists()
         comments = Comment.objects.filter(post=post) #змінна=елементові класу post
         form = get_comment_form(request, post)
         data_dict = { 'post': post, 
@@ -117,7 +133,8 @@ def slug_process(request, slug):
                       'comments': comments,
                       'likes_num': likes,
                       'is_liked': is_liked,
-                      'sidebar': sidebar 
+                      'is_saved': is_saved,
+                      'sidebar': sidebar,
                     }
         return render(request, 'post_view.html', data_dict)
 
