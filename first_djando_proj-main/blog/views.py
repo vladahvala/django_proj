@@ -27,7 +27,7 @@ def blog_main(request, *args):
     }
     return render(request, 'blog_main.html', data_dict)#запит, адреса, словник із даними
 
-@login_required
+@login_required #не пропускає незалогінених користувачів до наступної ф-ції
 def profile(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
