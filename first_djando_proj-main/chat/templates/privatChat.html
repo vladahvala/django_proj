@@ -1,1 +1,67 @@
-<h2>CHAAAAAAAAAAAAAAAAAT<h2>
+{% extends 'navbar.html' %}
+
+{% block content %}
+    <div class = "row">
+        <div class = "col s4 m3 l3 sidenav-fixed">
+            <div class = "row valign-wrapper">
+                <form id="search_user" method="POST" action="{% url 'search_user' %}">
+                    {% csrf_token %}
+                    <input type="search" name="searchuser" placeholder="Find a user...">
+                </form>
+                <button class="btn waves-effect waves-light" form="search_user" type="submit">Search</button>
+            </div>
+            {% for user_ in users %}
+                <div class="row valign-wrapper">
+                    <div class = "col s4 m4 l4">
+                        <a href="/chat/">
+                            <img src="/{{user_.profile.avatar}}" class="circle responsive-img">
+                        </a>
+                    </div>
+                    <div class = "col s8 m8 l8">
+                        <span class="black-text"> 
+                            <a href="/chat/">{{user_.username}}</a>
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            
+            <div class="col s8 m9 l9">
+                <div class="row valign-wrapper">
+                    <div class = "col s4 m4 l4">
+                        <h5>You are in chat with user</h5>
+                    </div>
+                    <div class = "col s2 m2 l2">
+                        <a href="{% url 'look_profile' other_user.username %}">
+                            <img src="/{{other_user.profile.avatar}}" class="circle responsive-img">
+                        </a>
+                    </div>
+                    <div class = "col s8 m8 l8">
+                        <span class="black-text"> 
+                            <a href="{% url 'look_profile' other_user.username %}">{{other_user.username}}</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            Повідомлення
+            {% for msg in messages %}
+            <div class="row valign-wrapper">
+                <div class="col s8 m12 l12">
+                    <div class= "card-panel grey lighten-2">
+                        <div class= "card-content">
+                            <p class="left">{{messages.sender.username}}</p>
+                            <p class="left">{{messages.text}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
