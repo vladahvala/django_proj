@@ -50,18 +50,60 @@
                 <div class="col s8 m12 l12">
                     <div class= "card-panel grey lighten-2">
                         <div class= "card-content">
-                            <p class="left">{{messages.sender.username}}</p>
-                            <p class="left">{{messages.text}}</p>
+                            <p class="left">{{msg.sender.username}}</p>
+                            <p class="left">{{msg.text}}</p>
                         </div>
                     </div>
                 </div>
             </div>
             {% endfor %}
             
+            <div class="row">
+                <div class="input-field col s8">
+                    <input id="message-input" type="text">
+                </div>
+                <div class="col s2">
+                    <button id="send-btn" class="btn waves-effect waves-light" type="submit" name="action">Send</button>
+                </div>
+            </div>
+
+
         </div>
 
 
     </div>
 
+<script>    
+    let messageSendBtn = document.getElementById("send-btn");
+    let messageInput = document.getElementById("message-input");
+    messageInput.scrollIntoView()
+
+    function sendMessage(){
+        let message = messageInput.value;
+        if (message === ""){
+            return;
+        }
+        messageInput.value = "";
+        fetch("{url 'chatroom-ajax' other_user.id}", {
+            method: "POST",
+            credential: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFtoken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify( {"message": message} )
+        }).then(resp => resp.json()).then(messages => {
+            for (message of messages){
+                show_message(message);
+            }
+        });
+    }
+
+    function show_message(message){
+        console.log(message);
+    }
+
+    messageSendBtn.addEventListener('click', sendMessage);
+</script>
 
 {% endblock %}
