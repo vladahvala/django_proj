@@ -40,12 +40,25 @@ def load_msgAJAX(request, pk):
     messages = Message.objects.filter(seen=False, receiver=request.user, sender=other_user)
 
     message_list = []
+    for msg in messages:
+        message_list.append({
+            "sender": msg.sender.username,
+            "message": msg.text,
+            "date_created": msg.date_created
+        })
+        msg.seen = True
+    messages.update(seen=True)
 
     if request.method=="POST":
         inMessage = json.loads(request.body)["message"]
         if inMessage:
             m = Message.objects.create(sender=request.user, receiver=other_user, text=inMessage)
             m.save()
+            message_list.append({
+            "sender": m.sender.username,
+            "message": m.text,
+            "date_created": m.date_created
+            })
     return JsonResponse(message_list, safe=False)
 
 def search_user(request):

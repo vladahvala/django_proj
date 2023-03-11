@@ -43,23 +43,38 @@
                     </div>
                 </div>
             </div>
-
-            Повідомлення
-            {% for msg in messages %}
-            <div class="row valign-wrapper">
-                <div class="col s8 m12 l12">
-                    <div class= "card-panel grey lighten-2">
-                        <div class= "card-content">
-                            <p class="left">{{msg.sender.username}}</p>
-                            <p class="left">{{msg.text}}</p>
+            
+            <div id="messages" class="">
+                Повідомлення
+                {% for msg in messages %}
+                <div class="row valign-wrapper">
+                    <div class="col s8 m12 l12">
+                        <div class= "card-panel grey lighten-2">
+                            <div class= "card-content">
+                                <div class="col s1">
+                                    <img src="/{{other_user.profile.avatar}}" class="circle responsive-img">
+                                    <div class="row center-align">
+                                        <a href="{% url 'look_profile' other_user.username %}">{{msg.sender.username}}</a>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row" align="justify">
+                                    <div class="col s8">
+                                        <div class="card-panel">
+                                                {{msg.text}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span>{{msg.date_created}}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
             
             <div class="row">
-                <div class="input-field col s8">
+                <div class="input-field col s7 offset-s3">
                     <input id="message-input" type="text">
                 </div>
                 <div class="col s2">
@@ -84,7 +99,7 @@
             return;
         }
         messageInput.value = "";
-        fetch("{url 'chatroom-ajax' other_user.id}", {
+        fetch("{% url 'chatroom-ajax' other_user.id %}", {
             method: "POST",
             credential: "same-origin",
             headers: {
@@ -96,11 +111,27 @@
             for (message of messages){
                 show_message(message);
             }
-        });
+        }).catch(e=> "Error in fetch: "+ e);
     }
 
     function show_message(message){
         console.log(message);
+        let msg_container = document.getElementById("messages");
+        let msg_row = document.createElement("div");
+        msg_row.className = "row valign-wrapper";
+        msg_row.innerHTML = `<div class="col s8 m12 l12">
+            <div class= "card-panel grey lighten-2">
+                <div class= "card-content">
+                    <p class="left">${message.sender}</p>
+                    <br>
+                    <p class="left">${message.message}</p>
+                    <br>
+                    <span>${message.date_created}</span>
+                </div>
+            </div>
+        </div>`;
+        msg_container.append(msg_row);
+        msg_row.scrollIntoView();
     }
 
     messageSendBtn.addEventListener('click', sendMessage);
