@@ -13,13 +13,21 @@
             {% for user_ in users %}
                 <div class="row valign-wrapper">
                     <div class = "col s4 m4 l4">
-                        <a href="/chat/">
+                        <a href="/chat/{{user_.pk}}">
                             <img src="/{{user_.profile.avatar}}" class="circle responsive-img">
                         </a>
                     </div>
                     <div class = "col s8 m8 l8">
                         <span class="black-text"> 
-                            <a href="/chat/">{{user_.username}}</a>
+                            <a href="/chat/{{user_.pk}}">{{user_.username}}</a>
+                            <span class="new badge">
+                                {% for key, value in unread_num_dict.items %}
+                                    {% if key %}
+                                    
+                                        {{value}}
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -48,13 +56,13 @@
                 Повідомлення
                 {% for msg in messages %}
                 <div class="row valign-wrapper">
-                    <div class="col s8 m12 l12">
+                    <div class="col s12 m12 l12">
                         <div class= "card-panel grey lighten-2">
                             <div class= "card-content">
                                 <div class="col s1">
-                                    <img src="/{{other_user.profile.avatar}}" class="circle responsive-img">
+                                    <img src="/{{msg.sender.profile.avatar}}" class="circle responsive-img">
                                     <div class="row center-align">
-                                        <a href="{% url 'look_profile' other_user.username %}">{{msg.sender.username}}</a>
+                                        <a href="{% url 'look_profile' msg.sender.username %}">{{msg.sender.username}}</a>
                                     </div>
                                 </div>
                                 <br>
@@ -135,6 +143,30 @@
     }
 
     messageSendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (event)=>{
+        if (event.key === "Enter"){
+            sendMessage();
+        }
+    });
+
+    //automatical timer
+    function load_messages(){
+        fetch("{% url 'chatroom-ajax' other_user.id %}", {
+            method: "GET",
+            credential: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFtoken": "{{ csrf_token }}"
+            },
+        }).then(resp => resp.json()).then(messages => {
+            for (message of messages){
+                show_message(message);
+            }
+        });
+    }
+
+    setInterval(load_messages, 5000);
+
 </script>
 
 {% endblock %}
