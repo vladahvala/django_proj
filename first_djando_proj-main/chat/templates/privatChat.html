@@ -20,14 +20,13 @@
                     <div class = "col s8 m8 l8">
                         <span class="black-text"> 
                             <a href="/chat/{{user_.pk}}">{{user_.username}}</a>
-                            <span class="new badge">
-                                {% for key, value in unread_num_dict.items %}
-                                    {% if key %}
-                                    
-                                        {{value}}
+                                {% for key, value in unread_msg.items %}
+                                    {% if key == user_.username %}
+                                        <span class="new badge">
+                                            {{value}}
+                                        </span>
                                     {% endif %}
                                 {% endfor %}
-                            </span>
                         </span>
                     </div>
                 </div>
