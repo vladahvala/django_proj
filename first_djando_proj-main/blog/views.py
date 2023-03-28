@@ -22,6 +22,7 @@ def blog_main(request, *args):
     except EmptyPage:
         data_page = paginator.page(paginator.num_pages)
     data_dict = {
+        "slide_posts": posts,
         "posts": data_page,
         "sidebar": sidebar,
     }

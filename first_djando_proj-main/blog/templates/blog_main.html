@@ -1,5 +1,39 @@
 {% extends 'navbar.html' %}
 
+{% block carousel %}
+<div class = "container">
+    <div class="carousel carousel-slider center">
+        {% for post in slide_posts %}
+        <div class="carousel-item white white-text" href="/{{ post.post_slug }}">
+            <div class="card">
+                <div class="card-image">
+                    <img class = "center-align responsive-img"
+                    src="/{{ post.img }}">
+                    <span class="card-title">
+                        <a href="/{{ post.post_slug }}">{{ post.title }}</a>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+      </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.carousel');
+        var instances = M.Carousel.init(elems, {
+            fullWidth: true,
+            indicators: false,
+        });
+        setInterval(function(){
+            M.Carousel.getInstance(elems[0]).next();
+        }, 3000);
+      });
+</script>
+{% endblock  %}
+
     {% block content %}
     <div class = "container">
         <br><br><br>
