@@ -6,8 +6,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import ProfileForm, AddCommentForm, RegisterForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from django.views.generic.list import ListView
+from django.views.generic import DetailView, CreateView
+
 
 # Create your views here.
 #дані збираються з бази даних, відправляються на html-сторінку, потім рендеряться(готуються) і відправляються назад користувачу
@@ -43,6 +46,39 @@ class PostListMain(ListView):
         return context
     #def get_queryset(self):        #варіант перевизначення стандартного списку постів
     # return Post.objects.filter(pk__lte=4)  
+
+class ShowPost(DetailView):
+    model = Post
+    template_name = "post_view.html"
+    slug_url_kwarg = "slug"
+    context_object_name = 'post'
+    def get_object(self):
+        slug = self.kwargs['slug']
+        obj_post = Post.objects.get(post_slug = slug)
+        return obj_post
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            if not context['post'].views_number.filter(id=self.request.user.id).exists():
+                context['post'].views_number.add(self.request.user)
+        context['views_num'] = context['post'].get_views_number()
+        context['likes_num'] = context['post'].get_likes_number()
+        context['is_liked'] = context['post'].likes.filter(id=self.request.user.id).exists()
+        context['is_saved'] = context['post'].saving.filter(id=self.request.user.id).exists()
+        context['comments'] = Comment.objects.filter(post=context['post']) 
+        context['sidebar'] = Category.objects.all()
+        #form = get_comment_form(self.request, context['post'])
+        return context
+
+class UserRegistration(CreateView):
+    form_class = RegisterForm
+    template_name = "register.html"
+    success_url = "/"
+    def form_valid(self, form):
+        username = form.cleaned_data.get("username")
+        messages.success(self.request, f"Створено новий акаунт: {username}")
+        return super().form_valid(form)
+
 
 
 @login_required #не пропускає незалогінених користувачів до наступної ф-ції
@@ -102,7 +138,7 @@ def search_post(request):
     posts = None
     if request.method == "POST":
         text = request.POST.get("searchpost")#отримуємо ім'я інпута із html-файла
-        posts = Post.objects.filter(title__icontains=text) #шукаємо по полю title і lookup-пу icontains
+        posts = Post.objects.filter(Q(title__icontains=text.lower()) | Q(title__icontains=text.upper()) | Q(title__icontains=text.capitalize()) ) #шукаємо по полю title і lookup-пу icontains
     data_dict = { "posts": posts }
     return render(request, 'blog_main.html', data_dict)
 
@@ -155,6 +191,7 @@ def slug_process(request, slug):
                       'sidebar': sidebar,
                     }
         return render(request, 'post_view.html', data_dict)
+
 
 def register(request):
     #POST incoming

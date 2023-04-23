@@ -50,7 +50,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100) #CharField - тип для короткого тексту
     text = models.TextField() #для зберігання тексту
     created_at = models.DateField(default=timezone.now) #час коли таблиця створена
-    post_slug = models.CharField(max_length=80, default="default_post") #коротка назва поста для url
+    post_slug = models.SlugField(max_length=80, default="default_post") #коротка назва поста для url
     img = models.ImageField(default = 'blog/static/img/default.jpeg', 
                             upload_to='blog/static/img', 
                             height_field=None, width_field=None,
