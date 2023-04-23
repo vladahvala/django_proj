@@ -22,6 +22,7 @@ urlpatterns = [
     #urls.py вже буде сприймати всі адреси із chat/ = 'room' - site/chat/room
     path('admin/', admin.site.urls), 
     path('captcha/', include('captcha.urls')),
+    path('tinymce/', include('tinymce.urls')),
     path('', include('blog.urls'))#якщо введено blog далі маршрутизатор звертатитметься до наступного файлу urls.py
 ]
 

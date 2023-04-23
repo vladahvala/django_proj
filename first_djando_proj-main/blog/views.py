@@ -7,9 +7,11 @@ from .forms import ProfileForm, AddCommentForm, RegisterForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 
+from django.views.generic.list import ListView
+
 # Create your views here.
 #дані збираються з бази даних, відправляються на html-сторінку, потім рендеряться(готуються) і відправляються назад користувачу
-
+"""
 def blog_main(request, *args):
     page = request.GET.get('page')
     posts = Post.objects.all()
@@ -27,6 +29,21 @@ def blog_main(request, *args):
         "sidebar": sidebar,
     }
     return render(request, 'blog_main.html', data_dict)#запит, адреса, словник із даними
+    """
+
+class PostListMain(ListView):
+    model = Post                #усі пости потрапляють у контекст object_list
+    context_object_name = 'posts'
+    template_name = 'blog_main.html'
+    paginate_by = 4
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sidebar'] = Category.objects.all()
+        context['slide_posts'] = Post.objects.all()
+        return context
+    #def get_queryset(self):        #варіант перевизначення стандартного списку постів
+    # return Post.objects.filter(pk__lte=4)  
+
 
 @login_required #не пропускає незалогінених користувачів до наступної ф-ції
 def profile(request):
