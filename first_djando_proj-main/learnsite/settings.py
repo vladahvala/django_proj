@@ -29,6 +29,9 @@ SECRET_KEY = 'django-insecure-4!m8&#5*=*esde_-9@@r9uk0%z0chku^jjn^8o%xv_jvy@c3!q
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '0.0.0.0', '127.0.0.1' ]
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 
 # Application definition
@@ -42,11 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'captcha',
     'tinymce',
+    'debug_toolbar',
     'blog',
     'chat'
 ]
 
+
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

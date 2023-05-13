@@ -3,10 +3,21 @@
 <html>
     <head>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+        crossorigin=""/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
         <link href={% static "tinymce/css/prism.css" rel="stylesheet"%}>
     </head>
+    <style type = "text/css">
+      #map {
+        height: 300px;
+      }
+    </style>
     <body>
         <script>  
             document.addEventListener('DOMContentLoaded', function() {
@@ -20,7 +31,7 @@
                 <a href="/" class="center brand-logo white-text">Logo</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                   <li>
-                    <form method=POST action="{% url 'search' %}" id="search_nav">
+                    <form method=GET action="{% url 'search' %}" id="search_nav">
                         {% csrf_token %}
                         <input type="search" name="searchpost" placeholder="Шукати статтю">
                     </form>

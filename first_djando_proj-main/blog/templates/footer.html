@@ -1,0 +1,98 @@
+<footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l8 s12">
+                    <div id="map"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      © 2014 Copyright Text
+      <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    var map = L.map('map').setView(
+        [50.62126014667899, 26.264352249370404], 18);
+        var Stadia_AlidadeSmoothDark =L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        Stadia_AlidadeSmoothDark.addTo(map);
+
+        var marker = L.marker([50.62126014667899, 26.264352249370404]).addTo(map);
+
+        marker.bindPopup("<strong>Рівненський палац дітей та молоді</strong>")
+
+        var coords = {
+            "type": "FeatureCollection",
+            "features": [
+              {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                  "coordinates": [
+                    [
+                      26.263902024925073,
+                      50.62150229468395
+                    ],
+                    [
+                      26.263902024925073,
+                      50.621276519594375
+                    ],
+                    [
+                      26.263958963171177,
+                      50.621252436854206
+                    ],
+                    [
+                      26.263949473463754,
+                      50.621135033319746
+                    ],
+                    [
+                      26.264096563931446,
+                      50.621135033319746
+                    ],
+                    [
+                      26.264153502177606,
+                      50.62101762949166
+                    ],
+                    [
+                      26.26469441551245,
+                      50.62102063984983
+                    ],
+                    [
+                      26.264737119196724,
+                      50.621577552806116
+                    ],
+                    [
+                      26.264404979428605,
+                      50.62158658377248
+                    ],
+                    [
+                      26.264386000013758,
+                      50.6214420880992
+                    ],
+                    [
+                      26.264272123522943,
+                      50.621433057105065
+                    ],
+                    [
+                      26.26426737866845,
+                      50.62152035664391
+                    ],
+                    [
+                      26.263911514632497,
+                      50.62150530501111
+                    ]
+                  ],
+                  "type": "LineString"
+                }
+              }
+            ]
+          }
+    L.geoJSON(coords).addTo(map);
+</script>

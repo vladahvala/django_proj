@@ -44,8 +44,15 @@ class PostListMain(ListView):
         context['sidebar'] = Category.objects.all()
         context['slide_posts'] = Post.objects.all()
         return context
-    #def get_queryset(self):        #варіант перевизначення стандартного списку постів
-    # return Post.objects.filter(pk__lte=4)  
+    def get_queryset(self):       
+        search_query = self.request.GET.get("searchpost")
+        if search_query:
+            return Post.objects.filter(
+                                    Q(title__icontains=search_query.lower()) | 
+                                    Q(title__icontains=search_query.upper()) | 
+                                    Q(title__icontains=search_query.capitalize())
+                                )
+        return Post.objects.all()  
 
 class ShowPost(DetailView):
     model = Post

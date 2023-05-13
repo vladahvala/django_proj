@@ -16,8 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+from .settings import DEBUG
 
-urlpatterns = [
+urlpatterns = [   
     path('chat/', include('chat.urls')), #маршрутизація(вказівка на директорію chat(urls.py)) на новий додаток 
     #urls.py вже буде сприймати всі адреси із chat/ = 'room' - site/chat/room
     path('admin/', admin.site.urls), 
@@ -25,6 +26,11 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('', include('blog.urls'))#якщо введено blog далі маршрутизатор звертатитметься до наступного файлу urls.py
 ]
+
+if DEBUG:
+    urlpatterns = [ path('__debug__/', include('debug_toolbar.urls')), ] + urlpatterns
+    
+    
 
 #'admin/', - шаблон відносного url,  
 #admin.site.urls - функція, що запускається при переході клієнтом на цю сторінку
